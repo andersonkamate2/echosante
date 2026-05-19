@@ -39,28 +39,12 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-3 sm:flex">
-          <ThemeLanguageControls />
-        </div>
-
-        <button
-          aria-label="Ouvrir le menu"
-          className="inline-flex items-center rounded-full border border-white/10 p-2 text-white transition hover:border-white/20 sm:hidden"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        
 
         <nav
           className={`fixed inset-x-0 top-full nav-menu pb-6 pt-4 shadow-soft transition-all duration-200 sm:static sm:top-auto sm:block sm:bg-transparent sm:p-0 ${open ? 'block' : 'hidden'}`}
         >
           <ul className="mx-auto flex max-w-7xl flex-col gap-3 px-6 text-sm sm:flex-row sm:items-center sm:gap-6 sm:px-0">
-            {/* Mobile-only controls: theme + language */}
-            <li className="sm:hidden">
-              <div className="py-2">
-                <ThemeLanguageControls />
-              </div>
-            </li>
             {links.map((item) => {
               const active = pathname === item.href;
               return (
@@ -75,8 +59,24 @@ export default function Navbar() {
                 </li>
               );
             })}
+            <li className="sm:hidden">
+              <div className="py-2">
+                <ThemeLanguageControls />
+              </div>
+            </li>
           </ul>
         </nav>
+        <div className="hidden items-center gap-3 sm:flex">
+          <ThemeLanguageControls />
+        </div>
+
+        <button
+          aria-label="Ouvrir le menu"
+          className="inline-flex items-center rounded-full border border-white/10 p-2 text-white transition hover:border-white/20 sm:hidden"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X size={20} /> : <Menu size={20} />}
+        </button>
       </div>
     </header>
   );
