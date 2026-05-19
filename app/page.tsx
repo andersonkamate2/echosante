@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function HomePage() {
   return (
@@ -18,7 +19,7 @@ export default function HomePage() {
                 Etre un acteur clé dans la promotion de la santé au sein de la communauté.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-slate-100">
-                C’est l’un des programmes de la Nouvelle UNIGOM piloté par les étudiants s’inscrivant dans la logique de la troisième mission de l’université de Goma, celle de rendre service à la communauté face aux défis de santé publique de la région.
+                Echo santé c’est l’un des programmes de la Nouvelle UNIGOM piloté par les étudiants s’inscrivant dans la logique de la troisième mission de l’université de Goma, celle de rendre service à la communauté face aux défis de santé publique de la région.
               </p>
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
@@ -31,27 +32,40 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-soft">
-          <p className="text-sm uppercase tracking-[0.35em] text-slate-400">Nos valeurs</p>
-          <div className="mt-8 space-y-6 text-slate-300">
-            <p className="text-lg font-semibold text-white">Solidarité</p>
-            <p>Des actions centrées sur l’humain, l’inclusion et le soutien local.</p>
-            <p className="text-lg font-semibold text-white">Transparence</p>
-            <p>Des résultats mesurables et un reporting clair pour chaque projet.</p>
-            <p className="text-lg font-semibold text-white">Impact</p>
-            <p>Des solutions conçues pour durer, avec des partenaires engagés.</p>
+        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-0 shadow-soft overflow-hidden">
+          <div className="relative h-56 w-full sm:h-64">
+            <Image
+              src="/img5.webp"
+              alt="Dernier projet santé"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="space-y-4 p-8">
+            <p className="text-sm uppercase tracking-[0.35em] text-slate-400">Dernier projet réalisé</p>
+            <h3 className="text-2xl font-semibold text-white">Sujet de la santé</h3>
+            <p className="text-slate-300">
+              Sujet de la santé : description claire et inspirante du dernier projet réalisé sur le terrain, mettant en valeur l’impact et l’engagement communautaire.
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
+      <div className="grid gap-8 lg:grid-cols-2">
         <div className="card">
-          <h2 className="text-xl font-semibold text-white">Projets locaux</h2>
-          <p className="mt-3 text-slate-300">Actions sur le terrain auprès des populations et des structures de santé.</p>
+          <h2 className="text-xl font-semibold text-white">Objectifs</h2>
+          <p className="mt-3 text-slate-300">
+            Encourager l’engagement communautaire en organisant des campagnes médiatiques et de terrain sur les enjeux de la santé publique et en incitant la communauté à l’action.
+            Sensibiliser la communauté sur les enjeux de santé publique; Créer un espace d’échange et de soutien entre les parties prenantes en santé; La communication pour le changement social et comportemental au sein de nos communautés.
+          </p>
         </div>
         <div className="card">
           <h2 className="text-xl font-semibold text-white">Partenariats</h2>
           <p className="mt-3 text-slate-300">Accompagnement des acteurs publics et privés pour des programmes responsables.</p>
+        </div>
+        <div className="card">
+          <h2 className="text-xl font-semibold text-white">Bénévolat</h2>
+          <p className="mt-3 text-slate-300">Opportunités de bénévolat et de contribution à nos campagnes de santé.</p>
         </div>
         <div className="card">
           <h2 className="text-xl font-semibold text-white">Bénévolat</h2>
