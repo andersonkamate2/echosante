@@ -21,7 +21,7 @@ export default function AdminDashboardPage() {
 
   const fetchArticles = async () => {
     const { data, error } = await supabaseClient
-      .from<Article>('articles')
+      .from('articles')
       .select('id, title, slug, excerpt, author, category, status, published_at, created_at')
       .order('created_at', { ascending: false });
 
@@ -77,7 +77,7 @@ export default function AdminDashboardPage() {
       tags: values.tags.split(',').map((tag: string) => tag.trim()).filter(Boolean),
       published_at: values.status === 'published' ? new Date().toISOString() : null,
     };
-    const { data, error } = await supabaseClient.from<Article>('articles').upsert(payload, { onConflict: 'id' });
+    const { data, error } = await supabaseClient.from('articles').upsert(payload, { onConflict: 'id' });
     setIsSaving(false);
     if (error) {
       setSessionError(error.message);

@@ -5,7 +5,7 @@ const defaultFields = `id, title, slug, excerpt, content, cover_image, author, c
 
 export async function getPublishedArticles(filters?: { query?: string; category?: string }) {
   let queryBuilder = supabaseServer
-    .from<Article>('articles')
+    .from('articles')
     .select(defaultFields)
     .eq('status', 'published');
 
@@ -26,7 +26,7 @@ export async function getPublishedArticles(filters?: { query?: string; category?
 
 export async function getArticleBySlug(slug: string) {
   const response = await supabaseServer
-    .from<Article>('articles')
+    .from('articles')
     .select(defaultFields)
     .eq('slug', slug)
     .eq('status', 'published')
@@ -39,7 +39,7 @@ export async function getArticleBySlug(slug: string) {
 
 export async function getAdminArticles() {
   const response = await supabaseServer
-    .from<Article>('articles')
+    .from('articles')
     .select(defaultFields)
     .order('created_at', { ascending: false });
   if (response.error) {
@@ -49,7 +49,7 @@ export async function getAdminArticles() {
 }
 
 export async function upsertArticle(article: Partial<Article>) {
-  const response = await supabaseServer.from<Article>('articles').upsert(article, { onConflict: 'id' });
+  const response = await supabaseServer.from('articles').upsert(article, { onConflict: 'id' });
   if (response.error) {
     throw new Error(response.error.message);
   }
