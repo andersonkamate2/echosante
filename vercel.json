@@ -10,7 +10,7 @@
   "regions": ["iad1"],
   "functions": {
     "server/index.ts": {
-      "runtime": "nodejs20.x"
+      "runtime": "nodejs18.x"
     }
   }
 }
