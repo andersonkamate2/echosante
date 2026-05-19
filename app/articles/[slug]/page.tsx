@@ -58,7 +58,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div className="space-y-2">
             <p className="text-xs uppercase tracking-[0.35em] text-slate-400">Tags</p>
             <div className="flex flex-wrap gap-2">
-              {article.tags.map((tag) => (
+              {article.tags.map((tag: string) => (
                 <span key={tag} className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-300">
                   {tag}
                 </span>

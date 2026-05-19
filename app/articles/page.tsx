@@ -1,6 +1,7 @@
 import ArticleCard from '@/components/ArticleCard';
 import EmptyState from '@/components/EmptyState';
 import { getPublishedArticles } from '@/lib/supabase/articles';
+import type { Article } from '@/types/article';
 
 export const metadata = {
   title: 'Articles - Echo Santé',
@@ -9,8 +10,8 @@ export const metadata = {
 
 export default async function ArticlesPage({ searchParams }: { searchParams: Promise<{ q?: string; category?: string }> }) {
   const params = await searchParams;
-  const articles = await getPublishedArticles({ query: params.q, category: params.category });
-  const categories = Array.from(new Set(articles.map((article) => article.category)));
+  const articles: Article[] = await getPublishedArticles({ query: params.q, category: params.category });
+  const categories = Array.from(new Set(articles.map((article: Article) => article.category)));
 
   if (articles.length === 0) {
     return <EmptyState title="Aucun article publié" description="Aucun article ne correspond à votre recherche pour le moment." />;

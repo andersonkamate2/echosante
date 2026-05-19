@@ -1,4 +1,5 @@
 type Row = Record<string, any>;
+type Profile = { id: string; email: string; role: string; password: string };
 
 function clone(v: any) {
   return JSON.parse(JSON.stringify(v));
@@ -28,7 +29,7 @@ function getState() {
     session,
     profiles: [
       { id: 'admin-1', email: 'admin@echosante.org', role: 'admin', password: 'password' },
-    ] as Row[],
+    ] as Profile[],
     articles: [
       {
         id: 'a1',
@@ -66,7 +67,7 @@ export function createMockSupabase() {
 
   const auth = {
     async signInWithPassword({ email, password }: { email: string; password: string }) {
-      const user = state.profiles.find((p) => p.email === email && p.password === password);
+      const user = state.profiles.find((p: Profile) => p.email === email && p.password === password);
       if (!user) {
         return { data: null, error: { message: 'Invalid login' } };
       }
