@@ -74,7 +74,7 @@ export default function AdminDashboardPage() {
     setIsSaving(true);
     const payload = {
       ...values,
-      tags: values.tags.split(',').map((tag: string) => tag.trim()).filter(Boolean),
+      tags: values.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag),
       published_at: values.status === 'published' ? new Date().toISOString() : null,
     };
     const { data, error } = await supabaseClient.from('articles').upsert(payload, { onConflict: 'id' });

@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getArticleBySlug, getPublishedArticles } from '@/lib/supabase/articles';
+import type { Article } from '@/types/article';
 
 export async function generateStaticParams() {
   const articles = await getPublishedArticles();
-  return articles.map((article) => ({ slug: article.slug }));
+  return articles.map((article: Article) => ({ slug: article.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
