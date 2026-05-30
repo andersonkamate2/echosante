@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Article {
+  id           String   @id @default(uuid())
+  title        String
+  slug         String   @unique
+  excerpt      String
+  content      String
+  cover_image  String
+  author       String
+  category     String
+  tags         String
+  status       String   @default("draft")
+  published_at DateTime?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  @@index([status])
+  @@index([category])
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  passwordSalt String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  description String
+  image_url   String?
+  status      String   @default("active")
+  order       Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@index([status])
+}
+
+model TeamMember {
+  id          String   @id @default(uuid())
+  name        String
+  role        String
+  email       String?
+  phone       String?
+  image_url   String?
+  bio         String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model PageContent {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  title       String
+  content     String
+  meta_description String?
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@index([slug])
+  @@index([published])
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  icon        String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model Statistic {
+  id          String   @id @default(uuid())
+  label       String
+  value       String
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model ContactMessage {
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  subject     String
+  message     String
+  phone       String?
+  read        Boolean  @default(false)
+  replied      Boolean  @default(false)
+  reply       String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@index([read])
+  @@index([replied])
+}
+
+model Gallery {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  image_url   String
+  category    String   @default("general")
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@index([category])
+}
+
+model SiteSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}

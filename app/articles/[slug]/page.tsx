@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getArticleBySlug, getPublishedArticles } from '@/lib/supabase/articles';
+import { getArticleBySlug, getPublishedArticles } from '@/lib/supabase/public';
 import type { Article } from '@/types/article';
+
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const articles = await getPublishedArticles();
@@ -17,6 +19,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${article.title} - Echo Santé`,
     description: article.excerpt,
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      images: article.cover_image ? [{ url: article.cover_image }] : undefined,
+    },
   };
 }
 

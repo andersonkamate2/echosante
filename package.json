@@ -4,15 +4,22 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run prisma:generate:sqlite && npm run prisma:push:sqlite && npm run prisma:seed && next dev",
     "dev:mock": "TEST_SUPABASE=1 next dev",
-    "build": "next build",
+    "build": "if [ \"$NODE_ENV\" != \"production\" ]; then npm run prisma:generate:sqlite; else npm run prisma:generate; fi && next build",
+    "build:local": "npm run prisma:generate:sqlite && DEBUG=true next build",
     "start": "next start",
     "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:generate:sqlite": "prisma generate --schema=prisma/schema.sqlite.prisma",
+    "prisma:push:sqlite": "prisma db push --schema=prisma/schema.sqlite.prisma",
+    "prisma:seed": "tsx prisma/seed.ts",
     "test:mock": "node scripts/test-flows.js",
-    "test:integration": "tsx scripts/test-flows-real.ts"
+    "test:integration": "tsx scripts/test-flows-real.ts",
+    "migrate:supabase": "tsx scripts/migrate-to-supabase.mjs"
   },
   "dependencies": {
+    "@prisma/client": "^5.17.0",
     "@supabase/supabase-js": "^2.35.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.453.0",
@@ -31,6 +38,7 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^15.5.18",
     "postcss": "^8.5.13",
+    "prisma": "^5.17.0",
     "tailwindcss": "^3.4.4",
     "tsx": "^4.22.3",
     "typescript": "^5.6.2"

@@ -28,15 +28,19 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-8">
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/logo_echo.png"
-            alt="Echo Santé Logo"
-            width={40}
-            height={40}
-            className="h-10 w-10"
+            src="/img1.webp"
+            alt="Logo Echo Santé"
+            width={64}
+            height={64}
+            className="h-16 w-16 object-contain"
           />
-          <span className="text-lg font-semibold uppercase tracking-[0.35em] text-white">
-            Echo Santé
-          </span>
+          <Image
+            src="/unigom.png"
+            alt="Logo UNIGOM"
+            width={64}
+            height={64}
+            className="h-16 w-16 object-contain"
+          />
         </Link>
 
         

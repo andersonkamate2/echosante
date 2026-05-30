@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signInAdmin } from '@/lib/supabase/auth';
+import { signInAdmin } from '@/lib/auth';
 import { useThemeLanguage } from '@/components/ThemeLanguageProvider';
 
 export default function AdminLoginPage() {

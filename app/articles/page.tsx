@@ -1,12 +1,14 @@
 import ArticleCard from '@/components/ArticleCard';
 import EmptyState from '@/components/EmptyState';
-import { getPublishedArticles } from '@/lib/supabase/articles';
+import { getPublishedArticles } from '@/lib/supabase/public';
 import type { Article } from '@/types/article';
 
 export const metadata = {
   title: 'Articles - Echo Santé',
   description: 'Articles de l’ONG Echo Santé pour partager des retours d’expérience et des conseils santé.',
 };
+
+export const revalidate = 60;
 
 export default async function ArticlesPage({ searchParams }: { searchParams: Promise<{ q?: string; category?: string }> }) {
   const params = await searchParams;

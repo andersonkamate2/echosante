@@ -1,7 +1,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { getPageContentBySlug, getPublishedProjects } from '@/lib/supabase/public';
+import type { Project } from '@/types/project';
+import type { PageContent } from '@/types/content';
 
-export default function HomePage() {
+export const revalidate = 60;
+
+export default async function HomePage() {
+  const page: PageContent | null = await getPageContentBySlug('home');
+  const projects: Project[] = await getPublishedProjects();
+
   return (
     <section className="space-y-16 py-8 sm:py-12">
       <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
@@ -15,12 +23,19 @@ export default function HomePage() {
               ONG / Santé / Impact
             </span>
             <div className="space-y-5">
-              <h1 className="max-w-3xl text-5xl font-semibold tracking-tight text-slate-50 sm:text-6xl">
-                Etre un acteur clé dans la promotion de la santé au sein de la communauté.
-              </h1>
-              <p className="max-w-2xl text-lg leading-8 text-slate-100">
-                Echo santé c’est l’un des programmes de la Nouvelle UNIGOM piloté par les étudiants s’inscrivant dans la logique de la troisième mission de l’université de Goma, celle de rendre service à la communauté face aux défis de santé publique de la région.
-              </p>
+              <h4 className="max-w-3xl text-5xl font-semibold tracking-tight text-slate-50 sm:text-6lg">
+                {page?.title ?? 'Etre un acteur clé dans la promotion de la santé au sein de la communauté.'}
+              </h4>
+              {page?.content ? (
+                <div
+                  className="max-w-2xl text-lg leading-8 text-slate-100"
+                  dangerouslySetInnerHTML={{ __html: page.content }}
+                />
+              ) : (
+                <p className="max-w-2xl text-lg leading-8 text-slate-100">
+                  Echo santé c’est l’un des programmes de la Nouvelle UNIGOM piloté par les étudiants s’inscrivant dans la logique de la troisième mission de l’université de Goma, celle de rendre service à la communauté face aux défis de santé publique de la région.
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link href="/about" className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-slate-100">
@@ -43,34 +58,21 @@ export default function HomePage() {
           </div>
           <div className="space-y-4 p-8">
             <p className="text-sm uppercase tracking-[0.35em] text-slate-400">Dernier projet réalisé</p>
-            <h3 className="text-2xl font-semibold text-white">Sujet de la santé</h3>
+            <h3 className="text-2xl font-semibold text-white">{projects[0]?.title ?? 'Sujet de la santé'}</h3>
             <p className="text-slate-300">
-              Sujet de la santé : description claire et inspirante du dernier projet réalisé sur le terrain, mettant en valeur l’impact et l’engagement communautaire.
+              {projects[0]?.description ?? 'Sujet de la santé : description claire et inspirante du dernier projet réalisé sur le terrain, mettant en valeur l’impact et l’engagement communautaire.'}
             </p>
           </div>
         </div>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
-        <div className="card">
-          <h2 className="text-xl font-semibold text-white">Objectifs</h2>
-          <p className="mt-3 text-slate-300">
-            Encourager l’engagement communautaire en organisant des campagnes médiatiques et de terrain sur les enjeux de la santé publique et en incitant la communauté à l’action.
-            Sensibiliser la communauté sur les enjeux de santé publique; Créer un espace d’échange et de soutien entre les parties prenantes en santé; La communication pour le changement social et comportemental au sein de nos communautés.
-          </p>
-        </div>
-        <div className="card">
-          <h2 className="text-xl font-semibold text-white">Partenariats</h2>
-          <p className="mt-3 text-slate-300">Accompagnement des acteurs publics et privés pour des programmes responsables.</p>
-        </div>
-        <div className="card">
-          <h2 className="text-xl font-semibold text-white">Bénévolat</h2>
-          <p className="mt-3 text-slate-300">Opportunités de bénévolat et de contribution à nos campagnes de santé.</p>
-        </div>
-        <div className="card">
-          <h2 className="text-xl font-semibold text-white">Bénévolat</h2>
-          <p className="mt-3 text-slate-300">Opportunités de bénévolat et de contribution à nos campagnes de santé.</p>
-        </div>
+        {projects.slice(0, 4).map((project) => (
+          <div key={project.id} className="card">
+            <h2 className="text-xl font-semibold text-white">{project.title}</h2>
+            <p className="mt-3 text-slate-300">{project.description}</p>
+          </div>
+        ))}
       </div>
     </section>
   );

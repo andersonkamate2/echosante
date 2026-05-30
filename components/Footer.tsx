@@ -2,11 +2,34 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { useThemeLanguage } from './ThemeLanguageProvider';
+
+type SiteSetting = {
+  id: string;
+  key: string;
+  value: string;
+};
 
 export default function Footer() {
   const { t } = useThemeLanguage();
   const currentYear = new Date().getFullYear();
+  const [siteSettings, setSiteSettings] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch('/api/site-settings')
+      .then((res) => res.json())
+      .then((settings: SiteSetting[]) => {
+        const mapped = settings.reduce((acc, setting) => ({
+          ...acc,
+          [setting.key]: setting.value,
+        }), {} as Record<string, string>);
+        setSiteSettings(mapped);
+      })
+      .catch(() => {
+        // Ignore fetch errors and keep static fallback values.
+      });
+  }, []);
 
   return (
     <footer className="border-t theme-header mt-24 bg-white/2">
@@ -72,8 +95,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="mailto:info@example.com" className="transition hover:text-white">
-                  info@example.com
+                <a href={`mailto:${siteSettings.contact_email ?? 'info@example.com'}`} className="transition hover:text-white">
+                  {siteSettings.contact_email ?? 'info@example.com'}
                 </a>
               </li>
             </ul>

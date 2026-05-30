@@ -6,6 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Heart, MapPin, Phone, Mail, Facebook, Twitter, Instagram, Youtube, Linkedin, ArrowUp, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import img1 from "/img1.webp";
+import unigom from "/unigom.png";
+
 /**
  * Design Philosophy: Professional Healthcare NGO
  * - Red accent color (#d32f2f) for trust and urgency
@@ -71,8 +74,8 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src="/img1.webp" alt="Echo Santé" className="h-12 w-12" />
-            <span className="font-bold text-lg text-red-600">Echo Santé</span>
+            <img src={img1} alt="Logo Echo Santé" className="h-12 w-12 object-contain" />
+            <img src={unigom} alt="Logo UNIGOM" className="h-12 w-12 object-contain" />
           </div>
           
           {/* Desktop Menu */}
