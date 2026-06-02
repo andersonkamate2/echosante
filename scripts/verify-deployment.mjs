@@ -13,7 +13,6 @@ const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.join(__dirname, '..');
 
 const REQUIRED_ENV_VARS = [
-  'NODE_ENV',
   'SITE_URL',
   'DATABASE_URL',
   'DIRECT_URL',
@@ -143,6 +142,17 @@ function checkVercelConfig() {
 
   const config = JSON.parse(fs.readFileSync(vercelPath, 'utf8'));
 
+  if ('env' in config) {
+    if (!config.env || typeof config.env !== 'object' || Array.isArray(config.env)) {
+      log('error', '✗ vercel.json env must be an object when present. Remove it and configure variables in Vercel Project Settings.');
+      errorCount++;
+    } else {
+      log('success', '✓ vercel.json env is a valid object');
+    }
+  } else {
+    log('success', '✓ vercel.json does not hard-code environment variables');
+  }
+
   // Check buildCommand includes migrations
   if (config.buildCommand && config.buildCommand.includes('prisma:migrate')) {
     log('success', `✓ buildCommand includes prisma:migrate`);
@@ -151,18 +161,7 @@ function checkVercelConfig() {
     warningCount++;
   }
 
-  // Check env variables are declared
-  const envVarsDeclared = config.env || [];
-  const missingEnvDeclarations = REQUIRED_ENV_VARS.filter(
-    (env) => !envVarsDeclared.includes(env),
-  );
-
-  if (missingEnvDeclarations.length === 0) {
-    log('success', `✓ All environment variables declared in vercel.json`);
-  } else {
-    log('warning', `⚠ Missing env declarations: ${missingEnvDeclarations.join(', ')}`);
-    warningCount++;
-  }
+  log('info', 'Environment variables must be configured in Vercel Project Settings, not as an array in vercel.json.');
 }
 
 function checkNextConfig() {

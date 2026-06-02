@@ -50,7 +50,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-sm text-slate-400">
-              ONG solide et durable, engagée pour la santé et l'accès aux soins.
+              ONG solide et durable, engagée pour la santé et l&apos;accès aux soins.
             </p>
           </div>
 

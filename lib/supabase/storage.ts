@@ -208,7 +208,7 @@ export async function fileExists(path: string): Promise<boolean> {
       return false;
     }
 
-    return (data || []).some((file) => file.name === path.split('/').pop());
+    return (data || []).some((file: { name: string }) => file.name === path.split('/').pop());
   } catch (error) {
     console.error('Unexpected error during file existence check:', error);
     return false;

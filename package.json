@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "npm run prisma:generate:sqlite && npm run prisma:push:sqlite && npm run prisma:seed && next dev",
     "dev:mock": "TEST_SUPABASE=1 next dev",
-    "build": "if [ \"$NODE_ENV\" != \"production\" ]; then npm run prisma:generate:sqlite; else npm run prisma:generate; fi && next build",
+    "build": "if [ \"$NODE_ENV\" != \"production\" ]; then npm run prisma:generate:sqlite && DATABASE_URL=file:./dev.db DEBUG=true next build; else npm run prisma:generate && next build; fi",
     "build:local": "npm run prisma:generate:sqlite && DATABASE_URL=file:./dev.db DEBUG=true next build",
     "start": "next start",
+    "postinstall": "prisma generate",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
     "prisma:generate:sqlite": "prisma generate --schema=prisma/schema.sqlite.prisma",

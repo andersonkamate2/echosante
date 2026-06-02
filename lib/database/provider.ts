@@ -22,7 +22,8 @@ export class DatabaseProvider {
         lower.includes('your-supabase') ||
         lower.includes('example') ||
         lower.includes('changeme') ||
-        lower.includes('test-')
+        lower.includes('test-') ||
+        /\[[^\]]+\]/.test(v)
       );
     };
 

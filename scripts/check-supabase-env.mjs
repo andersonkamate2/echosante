@@ -66,7 +66,7 @@ function loadEnvFiles(files) {
 }
 
 function isPlaceholder(value) {
-  return /your-|<.*>|example|changeme|replace-with|test\.supabase\.co|placeholder/i.test(value);
+  return /your-|<.*>|\[[^\]]+\]|example|changeme|replace-with|test\.supabase\.co|placeholder/i.test(value);
 }
 
 function addIssue(issues, key, reason) {

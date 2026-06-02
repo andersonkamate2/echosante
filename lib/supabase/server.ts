@@ -6,7 +6,6 @@ let supabaseServerInstance: any;
 const database = DatabaseProvider.getInstance();
 
 if (database.useSQLite) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore - mock object shape
   supabaseServerInstance = createMockSupabase();
 } else {
