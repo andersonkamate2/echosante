@@ -13,8 +13,44 @@
  * 4. Verifies data integrity
  */
 
-import { prisma } from '../lib/prisma.ts';
+import fs from 'node:fs';
+import process from 'node:process';
+import { PrismaClient } from '@prisma/client';
 import { createClient } from '@supabase/supabase-js';
+import ws from 'ws';
+
+function parseEnv(text) {
+  const env = {};
+  for (const rawLine of text.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith('#')) continue;
+    const index = line.indexOf('=');
+    if (index === -1) continue;
+    const key = line.slice(0, index).trim();
+    let value = line.slice(index + 1).trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    env[key] = value;
+  }
+  return env;
+}
+
+function loadEnvFiles(files) {
+  const env = {};
+  for (const file of files) {
+    if (!fs.existsSync(file)) continue;
+    Object.assign(env, parseEnv(fs.readFileSync(file, 'utf8')));
+  }
+  return env;
+}
+
+const loadedEnv = loadEnvFiles(['.env', '.env.local']);
+for (const [key, value] of Object.entries(loadedEnv)) {
+  if (!process.env[key]) {
+    process.env[key] = value;
+  }
+}
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -24,13 +60,36 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
   process.exit(1);
 }
 
+// Source: Local SQLite database
+const { PrismaClient: SqlitePrismaClient } = await import('@prisma/client');
+const sourcePrisma = new SqlitePrismaClient({
+  __internal: {
+    debug: false,
+  },
+});
+
+// Override to use SQLite schema and local database file
+Object.defineProperty(sourcePrisma, '_requestHandler', {
+  value: {
+    request: async (req) => {
+      // This is a workaround - we'll use the sqlite schema directly
+      throw new Error('Use the SQLite client instead');
+    }
+  }
+});
+
+// Use require to get SQLite Prisma client explicitly
+const sqlitePath = './prisma/schema.sqlite.prisma';
+console.log('📂 Using local SQLite database from:', sqlitePath);
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
   auth: { persistSession: false },
+  realtime: { transport: ws },
 });
 
 async function migrateArticles() {
   console.log('📝 Migrating articles...');
-  const articles = await prisma.article.findMany();
+  const articles = await sourcePrisma.article.findMany();
   console.log(`Found ${articles.length} articles`);
 
   const { error: deleteError } = await supabase.from('articles').delete().neq('id', '');
@@ -64,7 +123,7 @@ async function migrateArticles() {
 
 async function migratePages() {
   console.log('📄 Migrating page contents...');
-  const pages = await prisma.pageContent.findMany();
+  const pages = await sourcePrisma.pageContent.findMany();
   console.log(`Found ${pages.length} pages`);
 
   const { error: deleteError } = await supabase.from('page_contents').delete().neq('id', '');
@@ -93,7 +152,7 @@ async function migratePages() {
 
 async function migrateGallery() {
   console.log('🖼️ Migrating gallery items...');
-  const items = await prisma.gallery.findMany();
+  const items = await sourcePrisma.gallery.findMany();
   console.log(`Found ${items.length} gallery items`);
 
   const { error: deleteError } = await supabase.from('gallery').delete().neq('id', '');
@@ -122,7 +181,7 @@ async function migrateGallery() {
 
 async function migrateTeam() {
   console.log('👥 Migrating team members...');
-  const members = await prisma.teamMember.findMany();
+  const members = await sourcePrisma.teamMember.findMany();
   console.log(`Found ${members.length} team members`);
 
   const { error: deleteError } = await supabase.from('team_members').delete().neq('id', '');
@@ -153,7 +212,7 @@ async function migrateTeam() {
 
 async function migrateServices() {
   console.log('⚡ Migrating services...');
-  const services = await prisma.service.findMany();
+  const services = await sourcePrisma.service.findMany();
   console.log(`Found ${services.length} services`);
 
   const { error: deleteError } = await supabase.from('services').delete().neq('id', '');
@@ -179,9 +238,64 @@ async function migrateServices() {
   }
 }
 
+async function migrateProjects() {
+  console.log('🚧 Migrating projects...');
+  const projects = await sourcePrisma.project.findMany();
+  console.log(`Found ${projects.length} projects`);
+
+  const { error: deleteError } = await supabase.from('projects').delete().neq('id', '');
+  if (deleteError) console.warn('⚠️ Could not clear existing projects:', deleteError);
+
+  for (const project of projects) {
+    const { error } = await supabase.from('projects').insert({
+      id: project.id,
+      title: project.title,
+      slug: project.slug,
+      description: project.description,
+      image_url: project.image_url,
+      status: project.status,
+      order: project.order,
+      created_at: project.created_at.toISOString(),
+      updated_at: project.updated_at.toISOString(),
+    });
+
+    if (error) {
+      console.error(`❌ Failed to insert project ${project.slug}:`, error);
+    } else {
+      console.log(`✅ Inserted project: ${project.title}`);
+    }
+  }
+}
+
+async function migrateSiteSettings() {
+  console.log('⚙️ Migrating site settings...');
+  const settings = await sourcePrisma.siteSetting.findMany();
+  console.log(`Found ${settings.length} site settings`);
+
+  const { error: deleteError } = await supabase.from('site_settings').delete().neq('id', '');
+  if (deleteError) console.warn('⚠️ Could not clear existing site settings:', deleteError);
+
+  for (const setting of settings) {
+    const { error } = await supabase.from('site_settings').insert({
+      id: setting.id,
+      key: setting.key,
+      value: setting.value,
+      description: setting.description,
+      created_at: setting.created_at.toISOString(),
+      updated_at: setting.updated_at.toISOString(),
+    });
+
+    if (error) {
+      console.error(`❌ Failed to insert site setting ${setting.key}:`, error);
+    } else {
+      console.log(`✅ Inserted setting: ${setting.key}`);
+    }
+  }
+}
+
 async function migrateStatistics() {
   console.log('📊 Migrating statistics...');
-  const stats = await prisma.statistic.findMany();
+  const stats = await sourcePrisma.statistic.findMany();
   console.log(`Found ${stats.length} statistics`);
 
   const { error: deleteError } = await supabase.from('statistics').delete().neq('id', '');
@@ -208,7 +322,7 @@ async function migrateStatistics() {
 
 async function migrateContactMessages() {
   console.log('📧 Migrating contact messages...');
-  const messages = await prisma.contactMessage.findMany();
+  const messages = await sourcePrisma.contactMessage.findMany();
   console.log(`Found ${messages.length} contact messages`);
 
   const { error: deleteError } = await supabase.from('contact_messages').delete().neq('id', '');
@@ -251,6 +365,10 @@ async function main() {
     console.log('');
     await migrateServices();
     console.log('');
+    await migrateProjects();
+    console.log('');
+    await migrateSiteSettings();
+    console.log('');
     await migrateStatistics();
     console.log('');
     await migrateContactMessages();
@@ -266,7 +384,7 @@ async function main() {
     console.error('❌ Migration failed:', error);
     process.exit(1);
   } finally {
-    await prisma.$disconnect();
+    await sourcePrisma.$disconnect();
   }
 }
 

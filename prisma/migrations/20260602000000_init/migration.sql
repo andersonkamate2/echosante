@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Article" (
+CREATE TABLE "articles" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
@@ -14,23 +14,23 @@ CREATE TABLE "Article" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Article_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "articles_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "AdminUser" (
+CREATE TABLE "admin_users" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "passwordHash" TEXT NOT NULL,
-    "passwordSalt" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "password_hash" TEXT NOT NULL,
+    "password_salt" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "AdminUser_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "admin_users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Project" (
+CREATE TABLE "projects" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
@@ -41,11 +41,11 @@ CREATE TABLE "Project" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Project_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "projects_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "TeamMember" (
+CREATE TABLE "team_members" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "role" TEXT NOT NULL,
@@ -58,11 +58,11 @@ CREATE TABLE "TeamMember" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "TeamMember_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "team_members_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "PageContent" (
+CREATE TABLE "page_contents" (
     "id" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -73,11 +73,11 @@ CREATE TABLE "PageContent" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "PageContent_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "page_contents_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Service" (
+CREATE TABLE "services" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -87,11 +87,11 @@ CREATE TABLE "Service" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Service_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "services_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Statistic" (
+CREATE TABLE "statistics" (
     "id" TEXT NOT NULL,
     "label" TEXT NOT NULL,
     "value" TEXT NOT NULL,
@@ -100,11 +100,11 @@ CREATE TABLE "Statistic" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Statistic_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "statistics_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ContactMessage" (
+CREATE TABLE "contact_messages" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
@@ -117,11 +117,11 @@ CREATE TABLE "ContactMessage" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "ContactMessage_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "contact_messages_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Gallery" (
+CREATE TABLE "gallery" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -132,11 +132,11 @@ CREATE TABLE "Gallery" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Gallery_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "gallery_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "SiteSetting" (
+CREATE TABLE "site_settings" (
     "id" TEXT NOT NULL,
     "key" TEXT NOT NULL,
     "value" TEXT NOT NULL,
@@ -144,47 +144,55 @@ CREATE TABLE "SiteSetting" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "SiteSetting_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "site_settings_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Article_slug_key" ON "Article"("slug");
+CREATE UNIQUE INDEX "articles_slug_key" ON "articles"("slug");
 
 -- CreateIndex
-CREATE INDEX "Article_status_idx" ON "Article"("status");
+CREATE INDEX "articles_status_idx" ON "articles"("status");
 
 -- CreateIndex
-CREATE INDEX "Article_category_idx" ON "Article"("category");
+CREATE INDEX "articles_category_idx" ON "articles"("category");
 
 -- CreateIndex
-CREATE INDEX "Article_published_at_idx" ON "Article"("published_at");
+CREATE INDEX "articles_published_at_idx" ON "articles"("published_at");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "AdminUser_email_key" ON "AdminUser"("email");
+CREATE UNIQUE INDEX "admin_users_email_key" ON "admin_users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Project_slug_key" ON "Project"("slug");
+CREATE UNIQUE INDEX "projects_slug_key" ON "projects"("slug");
 
 -- CreateIndex
-CREATE INDEX "Project_status_idx" ON "Project"("status");
+CREATE INDEX "projects_status_idx" ON "projects"("status");
+
+CREATE INDEX "team_members_active_idx" ON "team_members"("active");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "PageContent_slug_key" ON "PageContent"("slug");
+CREATE UNIQUE INDEX "page_contents_slug_key" ON "page_contents"("slug");
 
 -- CreateIndex
-CREATE INDEX "PageContent_slug_idx" ON "PageContent"("slug");
+CREATE INDEX "page_contents_slug_idx" ON "page_contents"("slug");
 
 -- CreateIndex
-CREATE INDEX "PageContent_published_idx" ON "PageContent"("published");
+CREATE INDEX "page_contents_published_idx" ON "page_contents"("published");
+
+CREATE INDEX "services_active_idx" ON "services"("active");
+
+CREATE INDEX "statistics_active_idx" ON "statistics"("active");
 
 -- CreateIndex
-CREATE INDEX "ContactMessage_read_idx" ON "ContactMessage"("read");
+CREATE INDEX "contact_messages_read_idx" ON "contact_messages"("read");
 
 -- CreateIndex
-CREATE INDEX "ContactMessage_replied_idx" ON "ContactMessage"("replied");
+CREATE INDEX "contact_messages_replied_idx" ON "contact_messages"("replied");
 
 -- CreateIndex
-CREATE INDEX "Gallery_category_idx" ON "Gallery"("category");
+CREATE INDEX "gallery_category_idx" ON "gallery"("category");
+
+CREATE INDEX "gallery_active_idx" ON "gallery"("active");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "SiteSetting_key_key" ON "SiteSetting"("key");
+CREATE UNIQUE INDEX "site_settings_key_key" ON "site_settings"("key");

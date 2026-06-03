@@ -24,15 +24,19 @@ model Article {
 
   @@index([status])
   @@index([category])
+  @@index([published_at])
+  @@map("articles")
 }
 
 model AdminUser {
   id           String   @id @default(uuid())
   email        String   @unique
-  passwordHash String
-  passwordSalt String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  passwordHash String   @map("password_hash")
+  passwordSalt String   @map("password_salt")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("admin_users")
 }
 
 model Project {
@@ -47,6 +51,7 @@ model Project {
   updated_at  DateTime @updatedAt
 
   @@index([status])
+  @@map("projects")
 }
 
 model TeamMember {
@@ -61,6 +66,9 @@ model TeamMember {
   active      Boolean  @default(true)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@index([active])
+  @@map("team_members")
 }
 
 model PageContent {
@@ -76,6 +84,7 @@ model PageContent {
 
   @@index([slug])
   @@index([published])
+  @@map("page_contents")
 }
 
 model Service {
@@ -87,6 +96,9 @@ model Service {
   active      Boolean  @default(true)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@index([active])
+  @@map("services")
 }
 
 model Statistic {
@@ -97,6 +109,9 @@ model Statistic {
   active      Boolean  @default(true)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@index([active])
+  @@map("statistics")
 }
 
 model ContactMessage {
@@ -114,6 +129,7 @@ model ContactMessage {
 
   @@index([read])
   @@index([replied])
+  @@map("contact_messages")
 }
 
 model Gallery {
@@ -128,6 +144,8 @@ model Gallery {
   updated_at  DateTime @updatedAt
 
   @@index([category])
+  @@index([active])
+  @@map("gallery")
 }
 
 model SiteSetting {
@@ -137,4 +155,6 @@ model SiteSetting {
   description String?
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@map("site_settings")
 }

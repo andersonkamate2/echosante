@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import process from 'node:process';
 import { createClient } from '@supabase/supabase-js';
+import ws from 'ws';
 
 const args = new Set(process.argv.slice(2));
 const live = args.has('--live');
@@ -16,6 +17,7 @@ const filesByTarget = {
 
 const required = [
   'DATABASE_URL',
+  'DIRECT_URL',
   'AUTH_COOKIE_SECRET',
   'SITE_URL',
   'NEXT_PUBLIC_SUPABASE_URL',
@@ -106,6 +108,10 @@ function validate(env) {
     addIssue(issues, 'DATABASE_URL', 'production must use PostgreSQL, not SQLite');
   }
 
+  if (env.DIRECT_URL && !/^postgres(ql)?:\/\//.test(env.DIRECT_URL) && target === 'production') {
+    addIssue(issues, 'DIRECT_URL', 'production must use PostgreSQL, not SQLite');
+  }
+
   if (env.AUTH_COOKIE_SECRET && env.AUTH_COOKIE_SECRET.length < 32) {
     addIssue(issues, 'AUTH_COOKIE_SECRET', 'must be at least 32 characters');
   }
@@ -125,9 +131,11 @@ async function checkQuery(client, table, column) {
 async function runLiveChecks(env) {
   const anon = createClient(env.SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
     auth: { persistSession: false },
+    realtime: { transport: ws },
   });
   const service = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_KEY, {
     auth: { persistSession: false },
+    realtime: { transport: ws },
   });
 
   console.log('\nLive Supabase checks');

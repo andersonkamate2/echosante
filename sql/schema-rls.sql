@@ -12,20 +12,17 @@
 -- AUTHENTICATION & PROFILES
 -- ============================================================================
 
-create table if not exists auth.admin_role (
+create table if not exists public.admin_role (
   user_id uuid primary key references auth.users(id) on delete cascade,
   role text not null check (role in ('admin', 'user')),
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now()
 );
 
-alter table auth.admin_role enable row level security;
+alter table public.admin_role enable row level security;
 
-create policy "admin_role_self_read" on auth.admin_role for select
-  using (auth.uid() = user_id or exists (
-    select 1 from auth.admin_role ar
-    where ar.user_id = auth.uid() and ar.role = 'admin'
-  ));
+create policy "admin_role_self_read" on public.admin_role for select
+  using (auth.uid() = user_id);
 
 -- ============================================================================
 -- ARTICLES WITH PUBLISHED/DRAFT STATUS
@@ -54,7 +51,7 @@ create policy "articles_published_public_select" on public.articles for select
 
 create policy "articles_admin_all" on public.articles for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
@@ -73,7 +70,7 @@ create table if not exists public.page_contents (
   title text not null,
   content text not null,
   meta_description text,
-  order integer default 0,
+  "order" integer default 0,
   published boolean not null default false,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now()
@@ -86,13 +83,13 @@ create policy "page_contents_published_public_select" on public.page_contents fo
 
 create policy "page_contents_admin_all" on public.page_contents for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
 create index if not exists page_contents_slug_idx on public.page_contents(slug);
 create index if not exists page_contents_published_idx on public.page_contents(published);
-create index if not exists page_contents_order_idx on public.page_contents(order);
+create index if not exists page_contents_order_idx on public.page_contents("order");
 
 -- ============================================================================
 -- SITE SETTINGS
@@ -114,7 +111,7 @@ create policy "site_settings_public_select" on public.site_settings for select
 
 create policy "site_settings_admin_all" on public.site_settings for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
@@ -130,7 +127,7 @@ create table if not exists public.gallery (
   image_url text not null,
   description text,
   category text default 'general',
-  order integer default 0,
+  "order" integer default 0,
   active boolean not null default true,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now()
@@ -143,13 +140,13 @@ create policy "gallery_active_public_select" on public.gallery for select
 
 create policy "gallery_admin_all" on public.gallery for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
 create index if not exists gallery_active_idx on public.gallery(active);
 create index if not exists gallery_category_idx on public.gallery(category);
-create index if not exists gallery_order_idx on public.gallery(order);
+create index if not exists gallery_order_idx on public.gallery("order");
 
 -- ============================================================================
 -- PROJECTS (PUBLIC AND ADMIN MANAGED)
@@ -162,7 +159,7 @@ create table if not exists public.projects (
   description text not null,
   image_url text,
   status text default 'active' check (status in ('active', 'archived')),
-  order integer default 0,
+  "order" integer default 0,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now()
 );
@@ -174,7 +171,7 @@ create policy "projects_active_public_select" on public.projects for select
 
 create policy "projects_admin_all" on public.projects for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
@@ -193,7 +190,7 @@ create table if not exists public.team_members (
   phone text,
   image_url text,
   bio text,
-  order integer default 0,
+  "order" integer default 0,
   active boolean not null default true,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now()
@@ -206,12 +203,12 @@ create policy "team_members_active_public_select" on public.team_members for sel
 
 create policy "team_members_admin_all" on public.team_members for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
 create index if not exists team_members_active_idx on public.team_members(active);
-create index if not exists team_members_order_idx on public.team_members(order);
+create index if not exists team_members_order_idx on public.team_members("order");
 
 -- ============================================================================
 -- SERVICES (ACTIVE/INACTIVE)
@@ -222,7 +219,7 @@ create table if not exists public.services (
   title text not null,
   description text not null,
   icon text,
-  order integer default 0,
+  "order" integer default 0,
   active boolean not null default true,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now()
@@ -235,12 +232,12 @@ create policy "services_active_public_select" on public.services for select
 
 create policy "services_admin_all" on public.services for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
 create index if not exists services_active_idx on public.services(active);
-create index if not exists services_order_idx on public.services(order);
+create index if not exists services_order_idx on public.services("order");
 
 -- ============================================================================
 -- STATISTICS (ACTIVE/INACTIVE)
@@ -250,7 +247,7 @@ create table if not exists public.statistics (
   id uuid primary key default gen_random_uuid(),
   label text not null,
   value text not null,
-  order integer default 0,
+  "order" integer default 0,
   active boolean not null default true,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now()
@@ -263,12 +260,12 @@ create policy "statistics_active_public_select" on public.statistics for select
 
 create policy "statistics_admin_all" on public.statistics for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
 create index if not exists statistics_active_idx on public.statistics(active);
-create index if not exists statistics_order_idx on public.statistics(order);
+create index if not exists statistics_order_idx on public.statistics("order");
 
 -- ============================================================================
 -- CONTACT MESSAGES (ADMIN ONLY)
@@ -295,19 +292,19 @@ create policy "contact_messages_public_insert" on public.contact_messages for in
 
 create policy "contact_messages_admin_select" on public.contact_messages for select
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
 create policy "contact_messages_admin_update" on public.contact_messages for update
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
 create policy "contact_messages_admin_delete" on public.contact_messages for delete
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
@@ -325,7 +322,7 @@ create table if not exists public.testimonials (
   avatar_url text,
   content text not null,
   published boolean not null default false,
-  order integer default 0,
+  "order" integer default 0,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now()
 );
@@ -337,12 +334,12 @@ create policy "testimonials_published_public_select" on public.testimonials for 
 
 create policy "testimonials_admin_all" on public.testimonials for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
 create index if not exists testimonials_published_idx on public.testimonials(published);
-create index if not exists testimonials_order_idx on public.testimonials(order);
+create index if not exists testimonials_order_idx on public.testimonials("order");
 
 -- ============================================================================
 -- EVENTS/ACTIVITIES
@@ -370,7 +367,7 @@ create policy "events_published_public_select" on public.events for select
 
 create policy "events_admin_all" on public.events for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
@@ -390,7 +387,7 @@ create table if not exists public.partners (
   website_url text,
   description text,
   category text default 'partner' check (category in ('partner', 'sponsor', 'supporter')),
-  order integer default 0,
+  "order" integer default 0,
   active boolean not null default true,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now()
@@ -403,7 +400,7 @@ create policy "partners_active_public_select" on public.partners for select
 
 create policy "partners_admin_all" on public.partners for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
@@ -419,7 +416,7 @@ create table if not exists public.categories (
   name text not null unique,
   slug text not null unique,
   description text,
-  order integer default 0,
+  "order" integer default 0,
   active boolean not null default true,
   created_at timestamp with time zone not null default now()
 );
@@ -431,7 +428,7 @@ create policy "categories_active_public_select" on public.categories for select
 
 create policy "categories_admin_all" on public.categories for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 
@@ -443,7 +440,7 @@ create table if not exists public.tags (
   name text not null unique,
   slug text not null unique,
   description text,
-  order integer default 0,
+  "order" integer default 0,
   active boolean not null default true,
   created_at timestamp with time zone not null default now()
 );
@@ -455,7 +452,7 @@ create policy "tags_active_public_select" on public.tags for select
 
 create policy "tags_admin_all" on public.tags for all
   using (exists (
-    select 1 from auth.admin_role
+    select 1 from public.admin_role
     where user_id = auth.uid() and role = 'admin'
   ));
 

@@ -9,7 +9,7 @@ datasource db {
 }
 
 model Article {
-  id           String   @id @default(uuid())
+  id           String   @id @default(uuid()) @db.Uuid
   title        String
   slug         String   @unique
   excerpt      String
@@ -26,19 +26,22 @@ model Article {
   @@index([status])
   @@index([category])
   @@index([published_at])
+  @@map("articles")
 }
 
 model AdminUser {
-  id           String   @id @default(uuid())
+  id           String   @id @default(uuid()) @db.Uuid
   email        String   @unique
-  passwordHash String
-  passwordSalt String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  passwordHash String   @map("password_hash")
+  passwordSalt String   @map("password_salt")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("admin_users")
 }
 
 model Project {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) @db.Uuid
   title       String
   slug        String   @unique
   description String
@@ -49,10 +52,11 @@ model Project {
   updated_at  DateTime @updatedAt
 
   @@index([status])
+  @@map("projects")
 }
 
 model TeamMember {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) @db.Uuid
   name        String
   role        String
   email       String?
@@ -63,10 +67,13 @@ model TeamMember {
   active      Boolean  @default(true)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@index([active])
+  @@map("team_members")
 }
 
 model PageContent {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) @db.Uuid
   slug        String   @unique
   title       String
   content     String
@@ -78,10 +85,11 @@ model PageContent {
 
   @@index([slug])
   @@index([published])
+  @@map("page_contents")
 }
 
 model Service {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) @db.Uuid
   title       String
   description String
   icon        String?
@@ -89,20 +97,26 @@ model Service {
   active      Boolean  @default(true)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@index([active])
+  @@map("services")
 }
 
 model Statistic {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) @db.Uuid
   label       String
   value       String
   order       Int      @default(0)
   active      Boolean  @default(true)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@index([active])
+  @@map("statistics")
 }
 
 model ContactMessage {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) @db.Uuid
   name        String
   email       String
   subject     String
@@ -116,10 +130,11 @@ model ContactMessage {
 
   @@index([read])
   @@index([replied])
+  @@map("contact_messages")
 }
 
 model Gallery {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) @db.Uuid
   title       String
   description String?
   image_url   String
@@ -130,13 +145,17 @@ model Gallery {
   updated_at  DateTime @updatedAt
 
   @@index([category])
+  @@index([active])
+  @@map("gallery")
 }
 
 model SiteSetting {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) @db.Uuid
   key         String   @unique
   value       String
   description String?
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  @@map("site_settings")
 }
