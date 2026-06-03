@@ -25,7 +25,10 @@
     "env:check:local": "node scripts/check-supabase-env.mjs --target=local",
     "env:check:live": "node scripts/check-supabase-env.mjs --target=production --live",
     "db:migrate:prod": "npm run env:check && npm run prisma:migrate",
-    "test:db:local": "sh -c \"DATABASE_URL=file:./dev.db npm run prisma:generate:sqlite && DATABASE_URL=file:./dev.db npm run prisma:push:sqlite && DATABASE_URL=file:./dev.db npm run prisma:seed\""
+    "test:db:local": "sh -c \"DATABASE_URL=file:./dev.db npm run prisma:generate:sqlite && DATABASE_URL=file:./dev.db npm run prisma:push:sqlite && DATABASE_URL=file:./dev.db npm run prisma:seed\"",
+    "test:crud": "node scripts/test-crud.mjs",
+    "test:auth": "node scripts/test-auth.mjs",
+    "test:all": "npm run test:crud && npm run test:auth"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0",
@@ -52,7 +55,7 @@
     "prisma": "^5.17.0",
     "sqlite3": "^6.0.1",
     "tailwindcss": "^3.4.4",
-    "tsx": "^4.22.3",
+    "tsx": "^4.22.4",
     "typescript": "^5.6.2"
   },
   "overrides": {
