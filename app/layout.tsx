@@ -4,10 +4,12 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { ThemeLanguageProvider } from '@/components/ThemeLanguageProvider';
 
+const SITE_URL = process.env.SITE_URL && process.env.SITE_URL.trim() ? process.env.SITE_URL.trim() : 'https://echosante.org';
+
 export const metadata: Metadata = {
   title: 'Echo Santé - ONG moderne',
   description: "Site web professionnel pour l'ONG Echo Santé, responsive, minimaliste et optimisé SEO.",
-  metadataBase: new URL(process.env.SITE_URL ?? 'https://echosante.org'),
+  metadataBase: new URL(SITE_URL),
   icons: {
     icon: '/logo_echo.png',
   },
@@ -15,7 +17,7 @@ export const metadata: Metadata = {
     title: 'Echo Santé',
     description: "ONG solide et durable, engagée pour la santé et l'accès aux soins.",
     type: 'website',
-    url: process.env.SITE_URL ?? 'https://echosante.org',
+    url: SITE_URL,
   },
 };
 

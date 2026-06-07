@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { getPublishedArticles, getPublishedPageContents } from '@/lib/supabase/public';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = process.env.SITE_URL ?? 'https://echosante.org';
+  const siteUrl = process.env.SITE_URL && process.env.SITE_URL.trim() ? process.env.SITE_URL.trim() : 'https://echosante.org';
   const baseUrl = new URL(siteUrl);
 
   const now = new Date();

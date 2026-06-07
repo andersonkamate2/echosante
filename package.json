@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "sh -c \"DATABASE_URL=file:./dev.db npm run prisma:generate:sqlite && DATABASE_URL=file:./dev.db npm run prisma:push:sqlite && DATABASE_URL=file:./dev.db npm run prisma:seed && DATABASE_URL=file:./dev.db DEBUG=true next dev\"",
     "dev:mock": "TEST_SUPABASE=1 next dev",
-    "build": "sh -c \"case x${NODE_ENV:-} in xproduction) npm run prisma:generate && npm run prisma:migrate && next build ;; *) DATABASE_URL=file:./dev.db npm run prisma:generate:sqlite && DATABASE_URL=file:./dev.db npm run prisma:push:sqlite && DATABASE_URL=file:./dev.db npm run prisma:seed && DATABASE_URL=file:./dev.db DEBUG=true next build ;; esac\"",
+    "build": "npm run vercel-build",
+    "vercel-build": "sh -c \"DATABASE_URL=file:./dev.db npm run prisma:generate:sqlite && DATABASE_URL=file:./dev.db npm run prisma:push:sqlite && DATABASE_URL=file:./dev.db npm run prisma:seed && DATABASE_URL=file:./dev.db DEBUG=true next build\"",
     "build:local": "sh -c \"DATABASE_URL=file:./dev.db npm run prisma:generate:sqlite && DATABASE_URL=file:./dev.db npm run prisma:push:sqlite && DATABASE_URL=file:./dev.db npm run prisma:seed && DATABASE_URL=file:./dev.db DEBUG=true next build\"",
     "start": "next start",
     "postinstall": "prisma generate",
