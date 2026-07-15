@@ -7,7 +7,7 @@ import {
   createProject,
   updateProject,
   deleteProject,
-} from '@/lib/prisma/projects';
+} from '@/lib/data/projects';
 
 export async function GET(request: Request, context: any) {
   const user = await requireAdminUser();

@@ -1,5 +1,5 @@
 import WhatsAppForm from '@/components/WhatsAppForm';
-import { getPageContentBySlug, getSiteSetting } from '@/lib/supabase/public';
+import { getPageContentBySlug, getSiteSetting } from '@/lib/data/public';
 
 export const metadata = {
   title: 'Contact - Echo Santé',

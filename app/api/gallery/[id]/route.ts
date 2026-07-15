@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth-middleware';
-import { getGalleryById, updateGalleryItem, deleteGalleryItem } from '@/lib/prisma/gallery';
+import { getGalleryById, updateGalleryItem, deleteGalleryItem } from '@/lib/data/gallery';
 
 export async function GET(request: Request, context: any) {
   const user = await requireAdminUser();

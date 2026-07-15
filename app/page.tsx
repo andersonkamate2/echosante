@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { getPageContentBySlug, getPublishedProjects } from '@/lib/supabase/public';
+import { ArrowRight, HeartPulse, ShieldCheck, UsersRound } from 'lucide-react';
+import { getPageContentBySlug, getPublishedProjects } from '@/lib/data/public';
+import { getServices } from '@/lib/data/services';
+import { getStatistics } from '@/lib/data/statistics';
 import type { Project } from '@/types/project';
 import type { PageContent } from '@/types/content';
 
@@ -9,71 +12,102 @@ export const revalidate = 60;
 export default async function HomePage() {
   const page: PageContent | null = await getPageContentBySlug('home');
   const projects: Project[] = await getPublishedProjects();
+  const services = await getServices({ active: true });
+  const statistics = await getStatistics({ active: true });
 
   return (
-    <section className="space-y-16 py-8 sm:py-12">
-      <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-        <div
-          className="relative overflow-hidden rounded-[2rem] bg-cover bg-center bg-no-repeat p-8 sm:p-10 shadow-[inset_0_0_60px_rgba(0,0,0,0.7)]"
-          style={{ backgroundImage: "url('/equip.webp')" }}
-        >
-          <div className="absolute inset-0 bg-slate-950/80" />
-          <div className="relative space-y-8 text-shadow-lg">
-            <span className="inline-flex rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.4em] text-slate-100 backdrop-blur-sm">
+    <div className="space-y-12 pb-10 sm:space-y-16">
+      <section className="grid gap-6 pt-2 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
+        <div className="flex min-h-[520px] flex-col justify-between rounded-xl border border-white/10 bg-brand-950 p-6 text-white sm:p-8">
+          <div className="space-y-6">
+            <span className="inline-flex w-fit rounded-full bg-red-600 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white">
               ONG / Santé / Impact
             </span>
-            <div className="space-y-5">
-              <h4 className="max-w-3xl text-5xl font-semibold tracking-tight text-slate-50 sm:text-6lg">
-                {page?.title ?? 'Etre un acteur clé dans la promotion de la santé au sein de la communauté.'}
-              </h4>
+            <div className="space-y-4">
+              <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-normal sm:text-5xl">
+                {page?.title ?? 'Echo Santé, santé communautaire et impact local'}
+              </h1>
               {page?.content ? (
-                <div
-                  className="max-w-2xl text-lg leading-8 text-slate-100"
-                  dangerouslySetInnerHTML={{ __html: page.content }}
-                />
+                <div className="prose-content max-w-2xl text-base text-slate-200" dangerouslySetInnerHTML={{ __html: page.content }} />
               ) : (
-                <p className="max-w-2xl text-lg leading-8 text-slate-100">
-                  Echo santé c’est l’un des programmes de la Nouvelle UNIGOM piloté par les étudiants s’inscrivant dans la logique de la troisième mission de l’université de Goma, celle de rendre service à la communauté face aux défis de santé publique de la région.
+                <p className="max-w-2xl text-base leading-7 text-slate-200">
+                  Echo Santé déploie des actions de prévention, de consultation mobile et de formation pour renforcer les communautés.
                 </p>
               )}
             </div>
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <Link href="/about" className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-slate-100">
-                En savoir plus
-              </Link>
-              <Link href="/contact" className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/40 hover:bg-white/5">
-                Contact WhatsApp
-              </Link>
-            </div>
+          </div>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link href="/projects" className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-slate-100">
+              Voir les projets <ArrowRight size={16} />
+            </Link>
+            <Link href="/contact" className="inline-flex items-center justify-center rounded-lg border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
+              Contacter l’équipe
+            </Link>
           </div>
         </div>
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-0 shadow-soft overflow-hidden">
-          <div className="relative h-56 w-full sm:h-64">
-            <Image
-              src="/img5.webp"
-              alt="Dernier projet santé"
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className="space-y-4 p-8">
-            <p className="text-sm uppercase tracking-[0.35em] text-slate-400">Dernier projet réalisé</p>
-            <h3 className="text-2xl font-semibold text-white">{projects[0]?.title ?? 'Sujet de la santé'}</h3>
-            <p className="text-slate-300">
-              {projects[0]?.description ?? 'Sujet de la santé : description claire et inspirante du dernier projet réalisé sur le terrain, mettant en valeur l’impact et l’engagement communautaire.'}
-            </p>
-          </div>
-        </div>
-      </div>
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        {projects.slice(0, 4).map((project) => (
-          <div key={project.id} className="card">
-            <h2 className="text-xl font-semibold text-white">{project.title}</h2>
-            <p className="mt-3 text-slate-300">{project.description}</p>
+        <div className="grid gap-4">
+          <div className="relative min-h-[300px] overflow-hidden rounded-xl border border-white/10">
+            <Image src="/equip.webp" alt="Équipe Echo Santé sur le terrain" fill priority className="object-cover" sizes="(min-width: 1024px) 45vw, 100vw" />
           </div>
-        ))}
-      </div>
-    </section>
+          <div className="grid grid-cols-3 gap-3">
+            {statistics.slice(0, 3).map((stat) => (
+              <div key={stat.id} className="surface-panel p-4">
+                <p className="text-2xl font-semibold text-white">{stat.value}</p>
+                <p className="mt-1 text-xs leading-5 text-slate-400">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-4 sm:grid-cols-3">
+        {[
+          { icon: HeartPulse, title: 'Soins de proximité', text: 'Des interventions orientées terrain et besoins réels.' },
+          { icon: ShieldCheck, title: 'Prévention', text: 'Des messages clairs pour réduire les risques évitables.' },
+          { icon: UsersRound, title: 'Partenariats', text: 'Un travail coordonné avec les acteurs locaux.' },
+        ].map((item) => {
+          const Icon = item.icon;
+          return (
+            <article key={item.title} className="card">
+              <Icon className="text-[var(--accent)]" size={24} />
+              <h2 className="mt-4 text-lg font-semibold text-white">{item.title}</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-300">{item.text}</p>
+            </article>
+          );
+        })}
+      </section>
+
+      <section className="space-y-5">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--accent)]">Programmes</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white">Actions en cours</h2>
+          </div>
+          <Link href="/projects" className="text-sm font-semibold text-[var(--accent)]">Tous les projets</Link>
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {projects.slice(0, 3).map((project) => (
+            <article key={project.id} className="card flex min-h-44 flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-white">{project.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{project.description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="surface-panel p-5 sm:p-6">
+        <div className="grid gap-4 md:grid-cols-3">
+          {services.slice(0, 3).map((service) => (
+            <div key={service.id} className="border-b border-white/10 pb-4 last:border-0 last:pb-0 md:border-b-0 md:border-r md:pb-0 md:pr-4 md:last:border-r-0">
+              <h3 className="font-semibold text-white">{service.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-300">{service.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createPageContent } from '@/lib/prisma/pages';
-import { getPublishedPageContents } from '@/lib/supabase/public';
+import { createPageContent } from '@/lib/data/pages';
+import { getPublishedPageContents } from '@/lib/data/public';
 import { requireAdminUser } from '@/lib/auth-middleware';
 
 export async function GET() {

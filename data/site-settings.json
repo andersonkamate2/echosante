@@ -1,0 +1,42 @@
+[
+  {
+    "id": "setting-site-title",
+    "key": "site_title",
+    "value": "Echo Santé",
+    "description": "Nom du site",
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  },
+  {
+    "id": "setting-site-tagline",
+    "key": "site_tagline",
+    "value": "Un acteur clé de la santé communautaire et de l’impact social.",
+    "description": "Tagline de l’ONG",
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  },
+  {
+    "id": "setting-contact-phone",
+    "key": "contact_phone",
+    "value": "+243 983 474 584",
+    "description": "Numéro de téléphone principal",
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  },
+  {
+    "id": "setting-contact-email",
+    "key": "contact_email",
+    "value": "hello@echosante.org",
+    "description": "Adresse email de contact",
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  },
+  {
+    "id": "setting-contact-address",
+    "key": "contact_address",
+    "value": "Kinshasa, RDC",
+    "description": "Adresse physique",
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  }
+]

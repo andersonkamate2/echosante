@@ -1,0 +1,39 @@
+[
+  {
+    "id": "article-prevention-communautaire",
+    "title": "Prévention communautaire et santé locale",
+    "slug": "prevention-communautaire-sante-locale",
+    "excerpt": "Des repères simples pour renforcer la prévention dans les familles et les quartiers.",
+    "content": "<p>La prévention commence par des gestes quotidiens: information fiable, orientation rapide, hygiène, vaccination et suivi des personnes vulnérables.</p><p>Echo Santé travaille avec les relais locaux afin de rendre ces pratiques accessibles et compréhensibles.</p>",
+    "cover_image": "/equip.webp",
+    "author": "Echo Santé",
+    "category": "Prévention",
+    "tags": [
+      "prévention",
+      "communauté",
+      "santé"
+    ],
+    "status": "published",
+    "published_at": "2026-06-02T09:00:00.000Z",
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  },
+  {
+    "id": "article-clinique-mobile",
+    "title": "Clinique mobile: rapprocher les soins",
+    "slug": "clinique-mobile-rapprocher-les-soins",
+    "excerpt": "Notre approche de consultation mobile pour les zones peu desservies.",
+    "content": "<p>Les cliniques mobiles réduisent la distance entre les familles et les soins essentiels. Elles facilitent le dépistage, les conseils et l’orientation vers les structures adaptées.</p>",
+    "cover_image": "/img5.webp",
+    "author": "Echo Santé",
+    "category": "Terrain",
+    "tags": [
+      "clinique mobile",
+      "accès aux bons soins"
+    ],
+    "status": "published",
+    "published_at": "2026-07-15T14:10:31.210Z",
+    "created_at": "2026-06-10T09:00:00.000Z",
+    "updated_at": "2026-07-15T14:10:31.260Z"
+  }
+]

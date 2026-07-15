@@ -1,16 +1,21 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import type { Article } from '@/types/article';
 
 export default function ArticleCard({ article }: { article: Article }) {
   return (
     <article className="card group overflow-hidden border-white/10 transition hover:-translate-y-1 hover:border-white/20">
-      <img
-        className="h-56 w-full object-cover transition duration-500 group-hover:scale-105"
-        src={article.cover_image}
-        alt={article.title}
-      />
+      <div className="relative h-56 w-full overflow-hidden">
+        <Image
+          src={article.cover_image}
+          alt={article.title}
+          fill
+          className="object-cover transition duration-500 group-hover:scale-105"
+          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+        />
+      </div>
       <div className="space-y-3 p-6">
         <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-slate-400">
           <span>{article.category}</span>

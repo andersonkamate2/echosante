@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getPublishedArticles, getPublishedPageContents } from '@/lib/supabase/public';
+import { getPublishedArticles, getPublishedPageContents } from '@/lib/data/public';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.SITE_URL && process.env.SITE_URL.trim() ? process.env.SITE_URL.trim() : 'https://echosante.org';

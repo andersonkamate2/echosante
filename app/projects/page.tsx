@@ -1,5 +1,5 @@
 import type { Project } from '@/types/project';
-import { getPublishedProjects } from '@/lib/supabase/public';
+import { getPublishedProjects } from '@/lib/data/public';
 
 export const metadata = {
   title: 'Projets - Echo Santé',

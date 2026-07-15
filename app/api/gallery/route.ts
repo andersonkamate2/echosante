@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth-middleware';
-import { getPublishedGallery } from '@/lib/supabase/public';
-import { getGallery, createGalleryItem } from '@/lib/prisma/gallery';
+import { getPublishedGallery } from '@/lib/data/public';
+import { getGallery, createGalleryItem } from '@/lib/data/gallery';
 
 export async function GET(request: Request) {
   try {

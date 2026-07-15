@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getPublishedPageContents } from '@/lib/supabase/public';
+import { getPublishedPageContents } from '@/lib/data/public';
 import type { PageContent } from '@/types/content';
 
 export const metadata = {

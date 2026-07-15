@@ -1,6 +1,7 @@
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getArticleBySlug, getPublishedArticles } from '@/lib/supabase/public';
+import { getArticleBySlug, getPublishedArticles } from '@/lib/data/public';
 import type { Article } from '@/types/article';
 
 export const revalidate = 60;
@@ -43,13 +44,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <p className="max-w-3xl leading-8 text-slate-300">{article.excerpt}</p>
       </div>
 
-      <img className="rounded-[2rem] border border-white/10 object-cover shadow-soft" src={article.cover_image} alt={article.title} />
+      <div className="relative min-h-[260px] overflow-hidden rounded-xl border border-white/10 shadow-soft sm:min-h-[420px]">
+        <Image src={article.cover_image} alt={article.title} fill className="object-cover" sizes="100vw" priority />
+      </div>
 
       <section className="grid gap-8 lg:grid-cols-[0.75fr_0.25fr]">
         <div className="space-y-6 text-slate-300">
           <div dangerouslySetInnerHTML={{ __html: article.content }} />
         </div>
-        <aside className="space-y-6 rounded-[2rem] border border-white/10 bg-white/5 p-6 text-sm text-slate-300">
+        <aside className="space-y-6 rounded-xl border border-white/10 bg-white/5 p-6 text-sm text-slate-300">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-slate-400">Auteur</p>
             <p className="mt-2 text-white">{article.author}</p>

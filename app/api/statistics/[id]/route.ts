@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth-middleware';
-import { getStatisticById, updateStatistic, deleteStatistic } from '@/lib/prisma/statistics';
+import { getStatisticById, updateStatistic, deleteStatistic } from '@/lib/data/statistics';
 
 export async function GET(request: Request, context: any) {
   const user = await requireAdminUser();

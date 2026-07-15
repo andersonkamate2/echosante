@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
 type TabType = 'articles' | 'projects' | 'team' | 'services' | 'statistics' | 'pages' | 'gallery' | 'site-settings' | 'messages';
@@ -36,7 +36,7 @@ const defaultValuesForTab = (tab: TabType, resource?: any) => {
         image_url: safeResource.image_url ?? '',
         bio: safeResource.bio ?? '',
         order: safeResource.order ?? 0,
-        active: safeResource.active ?? false,
+        active: safeResource.active ?? true,
       };
     case 'services':
       return {
@@ -45,7 +45,7 @@ const defaultValuesForTab = (tab: TabType, resource?: any) => {
         description: safeResource.description ?? '',
         icon: safeResource.icon ?? '',
         order: safeResource.order ?? 0,
-        active: safeResource.active ?? false,
+        active: safeResource.active ?? true,
       };
     case 'statistics':
       return {
@@ -53,7 +53,7 @@ const defaultValuesForTab = (tab: TabType, resource?: any) => {
         label: safeResource.label ?? '',
         value: safeResource.value ?? '',
         order: safeResource.order ?? 0,
-        active: safeResource.active ?? false,
+        active: safeResource.active ?? true,
       };
     case 'pages':
       return {
@@ -63,7 +63,7 @@ const defaultValuesForTab = (tab: TabType, resource?: any) => {
         meta_description: safeResource.meta_description ?? '',
         content: safeResource.content ?? '',
         order: safeResource.order ?? 0,
-        published: safeResource.published ?? false,
+        published: safeResource.published ?? true,
       };
     case 'gallery':
       return {
@@ -73,14 +73,7 @@ const defaultValuesForTab = (tab: TabType, resource?: any) => {
         description: safeResource.description ?? '',
         category: safeResource.category ?? '',
         order: safeResource.order ?? 0,
-        active: safeResource.active ?? false,
-      };
-    case 'site-settings':
-      return {
-        id: safeResource.id ?? '',
-        key: safeResource.key ?? '',
-        value: safeResource.value ?? '',
-        description: safeResource.description ?? '',
+        active: safeResource.active ?? true,
       };
     case 'site-settings':
       return {
@@ -121,12 +114,12 @@ const submitTextForTab = (tab: TabType, hasId: boolean) => {
 };
 
 export default function AdminResourceForm({ tab, resource, onSubmit, isSaving }: AdminResourceFormProps) {
-  const safeResource = resource && typeof resource === 'object' ? resource : {};
+  const safeResource = useMemo(() => (resource && typeof resource === 'object' ? resource : {}), [resource]);
   const { register, handleSubmit, reset, watch } = useForm<any>({ defaultValues: defaultValuesForTab(tab, safeResource) });
 
   useEffect(() => {
     reset(defaultValuesForTab(tab, safeResource));
-  }, [tab, resource, reset]);
+  }, [tab, safeResource, reset]);
 
   const values = watch();
   const hasId = Boolean(values?.id);

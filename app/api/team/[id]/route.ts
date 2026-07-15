@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth-middleware';
-import { getTeamMemberById, updateTeamMember, deleteTeamMember } from '@/lib/prisma/team';
+import { getTeamMemberById, updateTeamMember, deleteTeamMember } from '@/lib/data/team';
 
 export async function GET(request: Request, context: any) {
   const user = await requireAdminUser();

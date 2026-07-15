@@ -1,8 +1,7 @@
 'use server';
 
-import { getCurrentUser, requireAdminUser } from '@/lib/auth-middleware';
-import { supabaseServer } from '@/lib/supabase/server';
-import { upsertArticle, deleteArticle } from '@/lib/prisma/articles';
+import { requireAdminUser } from '@/lib/auth-middleware';
+import { upsertArticle, deleteArticle } from '@/lib/data/articles';
 import { revalidatePath } from 'next/cache';
 
 export async function publishArticle(data: {
@@ -24,7 +23,7 @@ export async function publishArticle(data: {
 
   const payload = {
     ...data,
-    tags: Array.isArray(data.tags) ? data.tags.join(',') : data.tags,
+    tags: data.tags,
     published_at: data.status === 'published' ? new Date().toISOString() : null,
   };
 

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth-middleware';
-import { getServices, createService } from '@/lib/prisma/services';
+import { getServices, createService } from '@/lib/data/services';
 
 export async function GET() {
   const user = await requireAdminUser();

@@ -1,6 +1,6 @@
 import ArticleCard from '@/components/ArticleCard';
 import EmptyState from '@/components/EmptyState';
-import { getPublishedArticles } from '@/lib/supabase/public';
+import { getPublishedArticles } from '@/lib/data/public';
 import type { Article } from '@/types/article';
 
 export const metadata = {

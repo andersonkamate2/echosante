@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth-middleware';
-import { getPageContentById, updatePageContent, deletePageContent, getPageContent } from '@/lib/prisma/pages';
+import { getPageContentById, updatePageContent, deletePageContent, getPageContent } from '@/lib/data/pages';
 
 export async function GET(request: Request, context: any) {
   const user = await requireAdminUser();

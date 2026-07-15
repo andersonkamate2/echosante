@@ -1,124 +1,64 @@
+import crypto from 'crypto';
 import { NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth-middleware';
-import { prisma } from '@/lib/prisma';
-import crypto from 'crypto';
+import { createRecord, deleteRecord, findRecord, listRecords, updateRecord } from '@/lib/json-db/store';
 
 function createHash(password: string, salt: string) {
   return crypto.scryptSync(password, salt, 64).toString('hex');
 }
 
+function publicAdmin(admin: any) {
+  const { passwordHash, passwordSalt, ...safe } = admin;
+  return safe;
+}
+
 export async function GET() {
   const user = await requireAdminUser();
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const admins = await prisma.adminUser.findMany({
-    select: { id: true, email: true, createdAt: true, updatedAt: true },
-  });
-
-  return NextResponse.json(admins);
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const admins = await listRecords('admin-users');
+  return NextResponse.json(admins.map(publicAdmin));
 }
 
 export async function POST(request: Request) {
   const user = await requireAdminUser();
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
   const email = String(body.email ?? '').trim();
   const password = String(body.password ?? '').trim();
+  if (!email || !password) return NextResponse.json({ error: 'Email et mot de passe requis' }, { status: 400 });
 
-  if (!email || !password) {
-    return NextResponse.json({ error: 'Email et mot de passe requis' }, { status: 400 });
-  }
+  const existing = await findRecord('admin-users', (admin) => admin.email.toLowerCase() === email.toLowerCase());
+  if (existing) return NextResponse.json({ error: 'Cet email est déjà utilisé' }, { status: 409 });
 
-  const existing = await prisma.adminUser.findUnique({
-    where: { email },
-  });
-
-  if (existing) {
-    return NextResponse.json({ error: 'Cet email est déjà utilisé' }, { status: 409 });
-  }
-
-  const salt = crypto.randomUUID();
-  const passwordHash = createHash(password, salt);
-
-  const created = await prisma.adminUser.create({
-    data: { email, passwordHash, passwordSalt: salt },
-    select: { id: true, email: true, createdAt: true, updatedAt: true },
-  });
-
-  return NextResponse.json(created, { status: 201 });
+  const passwordSalt = crypto.randomUUID();
+  const created = await createRecord('admin-users', { email, passwordSalt, passwordHash: createHash(password, passwordSalt) }, 'admin');
+  return NextResponse.json(publicAdmin(created), { status: 201 });
 }
 
 export async function PUT(request: Request) {
   const user = await requireAdminUser();
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
   const id = String(body.id ?? '').trim();
-  const password = body.password ? String(body.password).trim() : undefined;
+  const password = body.password ? String(body.password).trim() : '';
+  if (!id || !password) return NextResponse.json({ error: 'ID et nouveau mot de passe requis' }, { status: 400 });
 
-  if (!id) {
-    return NextResponse.json({ error: 'ID requis' }, { status: 400 });
-  }
-
-  if (!password) {
-    return NextResponse.json({ error: 'Nouveau mot de passe requis' }, { status: 400 });
-  }
-
-  const existing = await prisma.adminUser.findUnique({
-    where: { id },
-  });
-
-  if (!existing) {
-    return NextResponse.json({ error: 'Administrateur introuvable' }, { status: 404 });
-  }
-
-  const salt = crypto.randomUUID();
-  const passwordHash = createHash(password, salt);
-
-  const updated = await prisma.adminUser.update({
-    where: { id },
-    data: { passwordHash, passwordSalt: salt },
-    select: { id: true, email: true, createdAt: true, updatedAt: true },
-  });
-
-  return NextResponse.json(updated);
+  const passwordSalt = crypto.randomUUID();
+  const updated = await updateRecord('admin-users', id, { passwordSalt, passwordHash: createHash(password, passwordSalt) });
+  return NextResponse.json(publicAdmin(updated));
 }
 
 export async function DELETE(request: Request) {
   const user = await requireAdminUser();
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
   const id = String(body.id ?? '').trim();
+  if (!id) return NextResponse.json({ error: 'ID requis' }, { status: 400 });
+  if (id === user.id) return NextResponse.json({ error: 'Impossible de se supprimer soi-même' }, { status: 400 });
 
-  if (!id) {
-    return NextResponse.json({ error: 'ID requis' }, { status: 400 });
-  }
-
-  if (id === user.id) {
-    return NextResponse.json({ error: 'Impossible de se supprimer soi-même' }, { status: 400 });
-  }
-
-  const existing = await prisma.adminUser.findUnique({
-    where: { id },
-  });
-
-  if (!existing) {
-    return NextResponse.json({ error: 'Administrateur introuvable' }, { status: 404 });
-  }
-
-  await prisma.adminUser.delete({
-    where: { id },
-  });
-
+  await deleteRecord('admin-users', id);
   return new NextResponse(null, { status: 204 });
 }

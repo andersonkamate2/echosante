@@ -1,4 +1,5 @@
-import { getPublishedGallery } from '@/lib/supabase/public';
+import Image from 'next/image';
+import { getPublishedGallery } from '@/lib/data/public';
 import type { GalleryItem } from '@/types/content';
 
 export const metadata = {
@@ -37,12 +38,16 @@ export default async function GalleryPage() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {galleryItems.map((item) => (
-          <figure key={item.id} className="group overflow-hidden rounded-[2rem] border border-white/10 transition hover:border-white/20">
-            <img
-              src={item.image_url}
-              alt={item.title}
-              className="h-64 w-full object-cover transition duration-300 group-hover:scale-110"
-            />
+          <figure key={item.id} className="group overflow-hidden rounded-xl border border-white/10 transition hover:border-white/20">
+            <div className="relative h-64 w-full overflow-hidden">
+              <Image
+                src={item.image_url}
+                alt={item.title}
+                fill
+                className="object-cover transition duration-300 group-hover:scale-110"
+                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+              />
+            </div>
             {item.title && (
               <figcaption className="bg-white/5 p-4 text-sm text-slate-300">
                 <p className="font-semibold text-white">{item.title}</p>

@@ -1,0 +1,10 @@
+[
+  {
+    "id": "admin-local",
+    "email": "admin@echosante.org",
+    "passwordHash": "bc2f5d6cf3803d69293f2c7d07e631cee8b3c59f0d76834d965ccdd887cfbe884e32d7601518be2cabbd58fdedd44e4afc601dc30ca0a86ad7f25903991bc513",
+    "passwordSalt": "echo-sante-local-salt",
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  }
+]

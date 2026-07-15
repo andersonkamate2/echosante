@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth-middleware';
-import { deleteArticle } from '@/lib/prisma/articles';
+import { deleteArticle } from '@/lib/data/articles';
 
 export async function DELETE(request: Request) {
   const user = await requireAdminUser();

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth-middleware';
-import { getContactMessages, createContactMessage } from '@/lib/prisma/contact';
+import { getContactMessages, createContactMessage } from '@/lib/data/contact';
 
 export async function GET(request: Request) {
   const user = await requireAdminUser();

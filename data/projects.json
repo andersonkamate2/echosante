@@ -1,0 +1,35 @@
+[
+  {
+    "id": "project-clinique-mobile",
+    "title": "Clinique mobile",
+    "slug": "clinique-mobile",
+    "description": "Consultations de proximité pour les familles isolées et les villages non desservis.",
+    "image_url": "/img5.webp",
+    "status": "active",
+    "order": 1,
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  },
+  {
+    "id": "project-education-sanitaire",
+    "title": "Éducation sanitaire",
+    "slug": "education-sanitaire",
+    "description": "Ateliers de prévention et de formation sur les gestes qui sauvent.",
+    "image_url": "/equip.webp",
+    "status": "active",
+    "order": 2,
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  },
+  {
+    "id": "project-partenariat-local",
+    "title": "Partenariat local",
+    "slug": "partenariat-local",
+    "description": "Soutien aux structures de santé communautaires et renforcement de capacités.",
+    "image_url": "/img1.webp",
+    "status": "active",
+    "order": 3,
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  }
+]

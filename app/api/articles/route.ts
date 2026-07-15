@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getAdminArticles, upsertArticle } from '@/lib/prisma/articles';
+import { getAdminArticles, upsertArticle } from '@/lib/data/articles';
 import { requireAdminUser } from '@/lib/auth-middleware';
 
 export async function GET() {

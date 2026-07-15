@@ -1,0 +1,32 @@
+[
+  {
+    "id": "service-consultations",
+    "title": "Consultations médicales",
+    "description": "Accès à des consultations médicales de proximité.",
+    "icon": "Stethoscope",
+    "order": 1,
+    "active": true,
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  },
+  {
+    "id": "service-sensibilisation",
+    "title": "Campagnes de sensibilisation",
+    "description": "Campagnes médiatiques et de terrain sur les enjeux de santé publique.",
+    "icon": "Megaphone",
+    "order": 2,
+    "active": true,
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  },
+  {
+    "id": "service-formation",
+    "title": "Formation sanitaire",
+    "description": "Ateliers de formation pour renforcer les capacités locales.",
+    "icon": "GraduationCap",
+    "order": 3,
+    "active": true,
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  }
+]

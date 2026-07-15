@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getPublishedArticles } from '@/lib/supabase/public';
-import { getAdminArticles } from '@/lib/prisma/articles';
+import { getPublishedArticles } from '@/lib/data/public';
+import { getAdminArticles } from '@/lib/data/articles';
 import { requireAdminUser } from '@/lib/auth-middleware';
 
 export async function GET(request: Request) {

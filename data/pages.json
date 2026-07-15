@@ -1,0 +1,35 @@
+[
+  {
+    "id": "page-home",
+    "slug": "home",
+    "title": "Etre un acteur clé dans la promotion de la santé au sein de la communauté.",
+    "content": "<p>Echo Santé intervient sur le terrain avec des campagnes de prévention, des consultations mobiles et des formations pour renforcer les capacités locales.</p>",
+    "meta_description": "Echo Santé - ONG dédiée à la santé communautaire.",
+    "order": 1,
+    "published": true,
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  },
+  {
+    "id": "page-about",
+    "slug": "about",
+    "title": "À propos",
+    "content": "<p>Echo Santé est une ONG dédiée à l’amélioration de l’accès aux soins, à la prévention et à la formation des acteurs de santé.</p><p>Nous construisons des projets durables, transparents et alignés sur les besoins locaux.</p>",
+    "meta_description": "Mission, vision et valeurs d’Echo Santé.",
+    "order": 2,
+    "published": true,
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  },
+  {
+    "id": "page-contact",
+    "slug": "contact",
+    "title": "Contact",
+    "content": "<p>Pour une demande de partenariat, une inscription bénévole ou une question sur nos programmes, contactez-nous via WhatsApp ou email.</p>",
+    "meta_description": "Contactez Echo Santé via WhatsApp, email ou adresse locale.",
+    "order": 3,
+    "published": true,
+    "created_at": "2026-06-02T09:00:00.000Z",
+    "updated_at": "2026-06-02T09:00:00.000Z"
+  }
+]

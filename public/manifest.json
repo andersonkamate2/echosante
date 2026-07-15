@@ -1,0 +1,27 @@
+{
+  "name": "Echo Santé",
+  "short_name": "Echo Santé",
+  "description": "ONG dédiée à la santé communautaire et à l'impact local.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#050505",
+  "theme_color": "#dc2626",
+  "categories": ["health", "education", "productivity"],
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "/logo_echo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo_echo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

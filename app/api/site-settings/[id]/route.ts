@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth-middleware';
-import { getSiteSettingById, updateSiteSetting, deleteSiteSetting } from '@/lib/prisma/siteSettings';
+import { getSiteSettingById, updateSiteSetting, deleteSiteSetting } from '@/lib/data/siteSettings';
 
 export async function GET(request: Request, context: any) {
   const user = await requireAdminUser();

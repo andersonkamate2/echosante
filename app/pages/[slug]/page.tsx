@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getPageContentBySlug, getPublishedPageContents } from '@/lib/supabase/public';
+import { getPageContentBySlug, getPublishedPageContents } from '@/lib/data/public';
 import type { PageContent } from '@/types/content';
 
 export const revalidate = 60;

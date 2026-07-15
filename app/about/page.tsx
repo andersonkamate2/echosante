@@ -1,4 +1,4 @@
-import { getPageContentBySlug } from '@/lib/supabase/public';
+import { getPageContentBySlug } from '@/lib/data/public';
 
 export const metadata = {
   title: 'À propos - Echo Santé',

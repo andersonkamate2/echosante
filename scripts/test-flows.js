@@ -1,54 +1,40 @@
-import { createMockSupabase } from '../lib/supabase/mock.mjs';
+#!/usr/bin/env node
+import fs from 'fs';
+import path from 'path';
 
-async function run() {
-  const supabase = createMockSupabase();
+const root = process.cwd();
+const requiredCollections = [
+  'articles',
+  'projects',
+  'team',
+  'services',
+  'statistics',
+  'pages',
+  'gallery',
+  'site-settings',
+  'contact-messages',
+  'admin-users',
+];
 
-  console.log('--- Test: sign in with valid credentials ---');
-  const sign = await supabase.auth.signInWithPassword({ email: 'admin@echosante.org', password: 'password' });
-  console.log('signIn result:', sign);
-  if (sign.error) process.exitCode = 2;
-
-  console.log('\n--- Test: get session ---');
-  const session = await supabase.auth.getSession();
-  console.log('session:', session);
-
-  console.log('\n--- Test: list articles (initial) ---');
-  await supabase.from('articles').select('*').order('created_at', { ascending: false }).then((r) => console.log('articles:', r.data));
-
-  console.log('\n--- Test: create new article (upsert without id) ---');
-  const payload = {
-    title: 'Article de test',
-    slug: 'article-de-test',
-    excerpt: 'Extrait test',
-    content: 'Contenu test',
-    cover_image: '',
-    author: 'Testeur',
-    category: 'Test',
-    tags: ['test','demo'],
-    status: 'draft',
-    published_at: null,
-  };
-  const created = await supabase.from('articles').upsert(payload);
-  console.log('created:', created.data && created.data[0]);
-
-  console.log('\n--- Test: list articles (after create) ---');
-  await supabase.from('articles').select('*').order('created_at', { ascending: false }).then((r) => console.log('articles:', r.data.map(a=>a.slug)));
-
-  console.log('\n--- Test: update article (upsert with id) ---');
-  const toUpdate = { ...created.data[0], title: 'Article modifié', tags: ['test','updated'] };
-  const updated = await supabase.from('articles').upsert(toUpdate);
-  console.log('updated:', updated.data && updated.data[0]);
-
-  console.log('\n--- Test: delete article ---');
-  const del = await supabase.from('articles').delete().eq('id', updated.data[0].id);
-  console.log('deleted:', del.data);
-
-  console.log('\n--- Test: sign out ---');
-  await supabase.auth.signOut();
-  const sessionAfter = await supabase.auth.getSession();
-  console.log('session after signOut:', sessionAfter);
-
-  console.log('\nAll mock flows completed.');
+function readJson(name) {
+  const file = path.join(root, 'data', `${name}.json`);
+  if (!fs.existsSync(file)) throw new Error(`Missing ${file}`);
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if (!Array.isArray(data)) throw new Error(`${file} must contain an array`);
+  return data;
 }
 
-run().catch((err)=>{ console.error(err); process.exitCode=1; });
+for (const collection of requiredCollections) {
+  const rows = readJson(collection);
+  for (const row of rows) {
+    if (!row.id) throw new Error(`${collection} contains a row without id`);
+  }
+  console.log(`${collection}: ${rows.length} row(s)`);
+}
+
+const publishedArticles = readJson('articles').filter((article) => article.status === 'published');
+const publishedPages = readJson('pages').filter((page) => page.published);
+if (publishedArticles.length === 0) throw new Error('At least one published article is required');
+if (publishedPages.length === 0) throw new Error('At least one published page is required');
+
+console.log('JSON data smoke test passed.');
