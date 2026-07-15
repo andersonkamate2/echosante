@@ -23,24 +23,24 @@ export default async function HomePage() {
             <span className="inline-flex w-fit rounded-full bg-red-600 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white">
               ONG / Santé / Impact
             </span>
-            <div className="space-y-4">
-              <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-normal sm:text-5xl">
+            <div className="space-y-4 text-white" style={{ color: '#b4b4b4c0' }}>
+              <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-normal !text-white sm:text-5xl" style={{ color: '#adadad' }}>
                 {page?.title ?? 'Echo Santé, santé communautaire et impact local'}
               </h1>
               {page?.content ? (
-                <div className="prose-content max-w-2xl text-base text-slate-200" dangerouslySetInnerHTML={{ __html: page.content }} />
+                <div className="prose-content max-w-2xl text-base !text-white" style={{ color: '#97979783' }} dangerouslySetInnerHTML={{ __html: page.content }} />
               ) : (
-                <p className="max-w-2xl text-base leading-7 text-slate-200">
+                <p className="max-w-2xl text-base leading-7 !text-white" style={{ color: '#949494' }}>
                   Echo Santé déploie des actions de prévention, de consultation mobile et de formation pour renforcer les communautés.
                 </p>
               )}
             </div>
           </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href="/projects" className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-slate-100">
+            <Link href="/projects" className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-white-100">
               Voir les projets <ArrowRight size={16} />
             </Link>
-            <Link href="/contact" className="inline-flex items-center justify-center rounded-lg border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
+            <Link href="/contact" className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-white-100">
               Contacter l’équipe
             </Link>
           </div>
